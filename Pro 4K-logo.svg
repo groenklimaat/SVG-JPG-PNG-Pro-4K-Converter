@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Achtergrond gradient (diep groen → emerald) -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#052e16"/>
+      <stop offset="45%" stop-color="#0f5132"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+
+    <!-- Goud gradient -->
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fffbe6"/>
+      <stop offset="22%" stop-color="#fde047"/>
+      <stop offset="50%" stop-color="#f5c542"/>
+      <stop offset="78%" stop-color="#d4a017"/>
+      <stop offset="100%" stop-color="#8a6400"/>
+    </linearGradient>
+
+    <!-- Goud voor tekst (iets warmer) -->
+    <linearGradient id="goldText" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff4b8"/>
+      <stop offset="40%" stop-color="#f5c542"/>
+      <stop offset="100%" stop-color="#a67c00"/>
+    </linearGradient>
+
+    <!-- Glans bovenin -->
+    <linearGradient id="shineGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Neon gloed voor 4K badge -->
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Schaduw voor gouden elementen -->
+    <filter id="goldShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+
+    <!-- Kaart schaduw -->
+    <filter id="cardShadow" x="-15%" y="-15%" width="130%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+
+    <!-- Binnenste gloed kaarten -->
+    <linearGradient id="cardInner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ===== ACHTERGROND ===== -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+
+  <!-- Decoratieve ringen -->
+  <circle cx="256" cy="256" r="235" fill="none" stroke="#f5c542" stroke-opacity="0.15" stroke-width="2"/>
+  <circle cx="256" cy="256" r="205" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1.5"/>
+  <circle cx="256" cy="256" r="175" fill="none" stroke="#f5c542" stroke-opacity="0.08" stroke-width="1"/>
+
+  <!-- Sterren decoratie -->
+  <g fill="#fde047" opacity="0.5">
+    <circle cx="88" cy="130" r="2.5"/>
+    <circle cx="430" cy="120" r="2"/>
+    <circle cx="72" cy="400" r="2"/>
+    <circle cx="448" cy="410" r="2.5"/>
+  </g>
+
+  <!-- Glans bovenin -->
+  <rect width="512" height="240" rx="112" fill="url(#shineGrad)" opacity="0.4"/>
+
+  <!-- ===== KROON (Pro-status) ===== -->
+  <g transform="translate(256 78)" filter="url(#goldShadow)">
+    <!-- Kroon lichaam -->
+    <path d="M -82 24 L -82 -26 L -44 -2 L 0 -44 L 44 -2 L 82 -26 L 82 24 Z"
+          fill="url(#goldGrad)" stroke="#5c4300" stroke-width="3" stroke-linejoin="round"/>
+    <!-- Kroon band -->
+    <rect x="-88" y="26" width="176" height="18" rx="8"
+          fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2.5"/>
+    <!-- Edelstenen -->
+    <circle cx="-82" cy="-30" r="10" fill="#fffbe6" stroke="#5c4300" stroke-width="2"/>
+    <circle cx="0" cy="-48" r="10" fill="#fffbe6" stroke="#5c4300" stroke-width="2"/>
+    <circle cx="82" cy="-30" r="10" fill="#fffbe6" stroke="#5c4300" stroke-width="2"/>
+    <!-- Robijn midden -->
+    <circle cx="0" cy="35" r="6" fill="#ef4444" stroke="#5c4300" stroke-width="1.8"/>
+    <circle cx="-2" cy="33" r="1.8" fill="#ffb3b3"/>
+    <!-- Kroon punt accenten -->
+    <path d="M -82 -26 L -82 -36 L -78 -30 L -74 -36 L -74 -26 Z" fill="#fffbe6"/>
+    <path d="M 0 -44 L 0 -54 L 4 -48 L 8 -54 L 8 -44 Z" fill="#fffbe6"/>
+    <path d="M 82 -26 L 82 -36 L 86 -30 L 90 -36 L 90 -26 Z" fill="#fffbe6"/>
+  </g>
+
+  <!-- ===== SVG KAART (boven) ===== -->
+  <g filter="url(#cardShadow)">
+    <rect x="146" y="158" width="220" height="84" rx="22" fill="url(#cardInner)"/>
+    <rect x="146" y="158" width="220" height="84" rx="22" fill="none"
+          stroke="#d4a017" stroke-width="2.5"/>
+    <text x="256" y="203" font-family="system-ui, -apple-system, sans-serif"
+          font-size="48" font-weight="900" text-anchor="middle" dominant-baseline="central"
+          fill="url(#goldText)" stroke="#5c4300" stroke-width="1.8"
+          paint-order="stroke fill">SVG</text>
+  </g>
+
+  <!-- ===== JPG KAART ===== -->
+  <g filter="url(#cardShadow)">
+    <rect x="42" y="340" width="200" height="84" rx="22" fill="url(#cardInner)"/>
+    <rect x="42" y="340" width="200" height="84" rx="22" fill="none"
+          stroke="#d4a017" stroke-width="2.5"/>
+    <text x="142" y="385" font-family="system-ui, -apple-system, sans-serif"
+          font-size="46" font-weight="900" text-anchor="middle" dominant-baseline="central"
+          fill="url(#goldText)" stroke="#5c4300" stroke-width="1.8"
+          paint-order="stroke fill">JPG</text>
+  </g>
+
+  <!-- ===== PNG KAART ===== -->
+  <g filter="url(#cardShadow)">
+    <rect x="270" y="340" width="200" height="84" rx="22" fill="url(#cardInner)"/>
+    <rect x="270" y="340" width="200" height="84" rx="22" fill="none"
+          stroke="#d4a017" stroke-width="2.5"/>
+    <text x="370" y="385" font-family="system-ui, -apple-system, sans-serif"
+          font-size="46" font-weight="900" text-anchor="middle" dominant-baseline="central"
+          fill="url(#goldText)" stroke="#5c4300" stroke-width="1.8"
+          paint-order="stroke fill">PNG</text>
+  </g>
+
+  <!-- ===== CONVERSIE PIJL ===== -->
+  <g transform="translate(256 282)" filter="url(#goldShadow)">
+    <!-- Pijl stam -->
+    <rect x="-12" y="-40" width="24" height="56" rx="6"
+          fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2.5"/>
+    <!-- Pijl punt -->
+    <path d="M -28 -8 L 0 26 L 28 -8 Z"
+          fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2.5" stroke-linejoin="round"/>
+    <!-- Highlight -->
+    <path d="M -15 -2 L 0 18 L 15 -2 Z" fill="#fffbe6" opacity="0.55"/>
+  </g>
+
+  <!-- ===== 4K BADGE (prominent) ===== -->
+  <g transform="translate(402 138)" filter="url(#neonGlow)">
+    <!-- Buitenste ring -->
+    <circle cx="0" cy="0" r="52" fill="#052e16" stroke="url(#goldGrad)" stroke-width="4"/>
+    <!-- Binnenste ring -->
+    <circle cx="0" cy="0" r="44" fill="none" stroke="#f5c542" stroke-opacity="0.5" stroke-width="1.5"/>
+    <!-- Glans -->
+    <path d="M -38 -18 A 44 44 0 0 1 38 -18 A 44 44 0 0 0 -38 -18 Z"
+          fill="#ffffff" opacity="0.12"/>
+    <!-- 4K tekst -->
+    <text x="0" y="3" font-family="system-ui, -apple-system, sans-serif"
+          font-size="38" font-weight="900" text-anchor="middle" dominant-baseline="central"
+          fill="url(#goldText)" stroke="#5c4300" stroke-width="1.6"
+          paint-order="stroke fill">4K</text>
+  </g>
+
+  <!-- ===== PRO BANNER (onder) ===== -->
+  <g transform="translate(256 458)">
+    <!-- Banner achtergrond -->
+    <rect x="-92" y="-20" width="184" height="40" rx="20"
+          fill="#052e16" stroke="url(#goldGrad)" stroke-width="2.5"/>
+    <!-- Glans -->
+    <rect x="-92" y="-20" width="184" height="20" rx="20" fill="#ffffff" opacity="0.08"/>
+    <!-- PRO tekst -->
+    <text x="0" y="1" font-family="system-ui, -apple-system, sans-serif"
+          font-size="22" font-weight="900" text-anchor="middle" dominant-baseline="central"
+          letter-spacing="8" fill="url(#goldText)"
+          stroke="#5c4300" stroke-width="1.2" paint-order="stroke fill">PRO</text>
+    <!-- Sterretjes links/rechts van PRO -->
+    <path d="M -72 0 L -68 -5 L -64 0 L -68 5 Z" fill="#fde047"/>
+    <path d="M 72 0 L 68 -5 L 64 0 L 68 5 Z" fill="#fde047"/>
+  </g>
+
+  <!-- ===== 4K INFO STREEP (onder PRO) ===== -->
+  <text x="256" y="494" font-family="system-ui, -apple-system, sans-serif"
+        font-size="10" font-weight="700" text-anchor="middle"
+        letter-spacing="4" fill="#f5c542" opacity="0.85">3840 × 2160</text>
+</svg>
