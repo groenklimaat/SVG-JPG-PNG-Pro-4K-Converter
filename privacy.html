@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacyverklaring — SVG/JPG/PNG Pro 4K Converter</title>
+<meta name="description" content="Privacyverklaring van SVG/JPG/PNG Pro 4K Converter. Alle conversies gebeuren lokaal in je browser. Geen upload, geen tracking, geen account.">
+<meta name="theme-color" content="#15803d">
+<meta name="color-scheme" content="light dark">
+
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon_192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon_512x512.png">
+<link rel="apple-touch-icon" href="icon_192x192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pro 4K">
+<meta name="application-name" content="SVG/JPG/PNG Pro 4K Converter">
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-900: #052e16;
+    --green-700: #15803d;
+    --green-500: #22c55e;
+    --green-100: #d1fae5;
+    --green-50: #ecfdf5;
+    --gold-500: #f5c542;
+    --gold-700: #d4a017;
+    --ink: #1a202c;
+    --muted: #666;
+    --line: #e5e7eb;
+    --bg: #f0f4f8;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    padding: 30px 16px;
+    color: var(--ink);
+    line-height: 1.65;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 45px 42px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  }
+
+  @media (max-width: 620px) {
+    .page { padding: 28px 22px; }
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding-bottom: 24px;
+    border-bottom: 3px solid var(--green-500);
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    width: 84px;
+    height: 84px;
+    border-radius: 18px;
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(5,46,22,0.25);
+  }
+  .header-text { flex: 1; min-width: 200px; }
+  .header-text h1 {
+    font-size: 26px;
+    color: #14532d;
+    letter-spacing: -0.4px;
+    margin-bottom: 4px;
+  }
+  .header-text p {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 3px 10px;
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+    color: #4a3000;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== SECTIONS ===== */
+  h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--green-700);
+    font-weight: 700;
+    margin: 28px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h2::before {
+    content: "";
+    width: 4px;
+    height: 16px;
+    background: linear-gradient(180deg, var(--green-500), var(--green-700));
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: 14px;
+    color: #14532d;
+    font-weight: 700;
+    margin: 18px 0 6px;
+  }
+
+  p, li {
+    font-size: 15px;
+    color: #2d3748;
+    margin-bottom: 8px;
+  }
+
+  ul {
+    padding-left: 22px;
+    margin: 8px 0 12px;
+  }
+  li { margin-bottom: 5px; }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    background: var(--green-50);
+    border-left: 4px solid var(--green-500);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 18px 0;
+    font-size: 14.5px;
+    color: #14532d;
+  }
+  .callout strong { color: #0a3d1f; }
+
+  .callout.gold {
+    background: #fffbe6;
+    border-left-color: var(--gold-500);
+    color: #7a5900;
+  }
+  .callout.gold strong { color: #4a3000; }
+
+  .callout.warn {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+    color: #991b1b;
+  }
+  .callout.warn strong { color: #7f1d1d; }
+
+  /* ===== LINKS ===== */
+  a {
+    color: var(--green-700);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  a:hover { text-decoration: underline; }
+
+  /* ===== TABLE ===== */
+  .info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 16px;
+    font-size: 14px;
+    background: #fff;
+    border: 1px solid var(--green-100);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .info-table th,
+  .info-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--green-100);
+    vertical-align: top;
+  }
+  .info-table th {
+    background: var(--green-50);
+    color: #14532d;
+    font-weight: 700;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .info-table tr:last-child td { border-bottom: none; }
+
+  /* ===== BACK BUTTON ===== */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--green-700), var(--green-500));
+    color: #fff;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(34,197,94,0.3);
+    transition: transform 0.15s;
+  }
+  .back-btn:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 36px;
+    padding-top: 22px;
+    border-top: 2px dashed #d1d5db;
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+  }
+  .footer .crown { font-size: 24px; display: block; margin-bottom: 6px; }
+  .footer .name { color: var(--green-700); font-weight: 700; }
+  .footer .pro-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 8px;
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+    color: #4a3000;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; padding: 20px; border-radius: 0; }
+    .back-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <defs>
+        <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#052e16"/>
+          <stop offset="45%" stop-color="#0f5132"/>
+          <stop offset="100%" stop-color="#15803d"/>
+        </linearGradient>
+        <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fffbe6"/>
+          <stop offset="50%" stop-color="#f5c542"/>
+          <stop offset="100%" stop-color="#8a6400"/>
+        </linearGradient>
+      </defs>
+      <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+      <g transform="translate(256 200)" filter="drop-shadow(0 3px 4px rgba(0,0,0,0.35))">
+        <path d="M -82 24 L -82 -26 L -44 -2 L 0 -44 L 44 -2 L 82 -26 L 82 24 Z"
+              fill="url(#goldGrad)" stroke="#5c4300" stroke-width="3" stroke-linejoin="round"/>
+        <rect x="-88" y="26" width="176" height="18" rx="8"
+              fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2.5"/>
+      </g>
+      <text x="256" y="380" font-family="system-ui, sans-serif"
+            font-size="42" font-weight="900" text-anchor="middle"
+            fill="url(#goldGrad)" stroke="#5c4300" stroke-width="1.5"
+            paint-order="stroke fill">PRO 4K</text>
+    </svg>
+    <div class="header-text">
+      <h1>Privacyverklaring</h1>
+      <p>SVG/JPG/PNG Pro 4K Converter</p>
+      <span class="badge">👑 PRO 4K · €2 EENMALIG</span>
+    </div>
+  </div>
+
+  <!-- ===== KORTE SAMENVATTING ===== -->
+  <div class="callout">
+    <strong>Kort samengevat:</strong> Al je afbeeldingen worden <strong>volledig lokaal in je browser</strong>
+    verwerkt. Er wordt niets naar een server gestuurd, niets opgeslagen en niets gedeeld.
+    De app vraagt geen account en plaatst geen tracking-cookies.
+  </div>
+
+  <!-- ===== 1. WIE WIJ ZIJN ===== -->
+  <h2>1. Wie wij zijn</h2>
+  <p>
+    <strong>SVG/JPG/PNG Pro 4K Converter</strong> is een betaalde desktop- en webapplicatie
+    ontwikkeld door <strong>groenklimaat</strong>. De app wordt aangeboden via de
+    Microsoft Store en als Progressive Web App (PWA). De applicatie is bedoeld om
+    eenvoudig afbeeldingen (SVG, JPG, PNG) te converteren naar verschillende formaten
+    en afmetingen, waaronder 4K-resoluties.
+  </p>
+
+  <!-- ===== 2. WELKE GEGEVENS ===== -->
+  <h2>2. Welke gegevens wij verwerken</h2>
+  <p>
+    <strong>Wij verzamelen geen persoonsgegevens.</strong> De app vraagt niet om een account,
+    e-mailadres, telefoonnummer of andere persoonlijke informatie. Er worden geen
+    tracking-cookies of advertentie-identificaties geplaatst.
+  </p>
+  <p>De enige gegevens die tijdelijk worden verwerkt, zijn:</p>
+  <ul>
+    <li>De afbeelding(en) die jij zelf selecteert om te converteren.</li>
+    <li>De door jou gekozen instellingen (breedte, hoogte, formaat, kwaliteit).</li>
+  </ul>
+  <p>
+    Deze gegevens blijven <strong>uitsluitend in je eigen browser of op je eigen apparaat</strong>
+    en worden nooit verzonden naar een server.
+  </p>
+
+  <!-- ===== 3. HOE CONVERSIE WERKT ===== -->
+  <h2>3. Hoe de conversie werkt</h2>
+  <p>
+    Alle conversies gebeuren met behulp van de ingebouwde <strong>HTML5 Canvas API</strong>
+    en JavaScript in je browser. Dit betekent:
+  </p>
+  <ul>
+    <li>Je bestanden verlaten je apparaat nooit.</li>
+    <li>Er is geen internetverbinding nodig voor de conversie zelf.</li>
+    <li>De app werkt volledig offline (na de eerste keer laden).</li>
+  </ul>
+
+  <!-- ===== 4. OPSLAG & COOKIES ===== -->
+  <h2>4. Opslag & cookies</h2>
+  <p>
+    De app gebruikt <strong>geen tracking-cookies</strong>. Voor offline gebruik maakt de app
+    gebruik van de <strong>Service Worker Cache API</strong> van je browser. Hierin worden
+    alleen de bestanden van de app zelf opgeslagen (HTML, CSS, JavaScript, iconen) — nooit
+    jouw afbeeldingen of persoonlijke gegevens.
+  </p>
+  <p>
+    Je kunt deze cache op elk moment wissen via de instellingen van je browser.
+  </p>
+
+  <!-- ===== 5. BETALING ===== -->
+  <h2>5. Betaling & aankoop</h2>
+  <p>
+    De applicatie is een <strong>eenmalige betaalde aankoop van €2,00</strong> (inclusief BTW
+    waar van toepassing). Er is geen abonnement en er zijn geen terugkerende kosten.
+  </p>
+
+  <h3>5.1 Via de Microsoft Store</h3>
+  <p>
+    Als je de app aanschaft via de <strong>Microsoft Store</strong>, verwerkt Microsoft
+    de betaling. Dit betekent:
+  </p>
+  <ul>
+    <li>Microsoft ontvangt je betaalgegevens (creditcard, PayPal, enz.).</li>
+    <li>Wij ontvangen <strong>geen</strong> betaalgegevens — alleen een bevestiging dat de aankoop is voltooid.</li>
+    <li>Het privacybeleid van Microsoft is van toepassing op de betalingstransactie.</li>
+  </ul>
+
+  <h3>5.2 Via een andere verkoper (indien van toepassing)</h3>
+  <p>
+    Als je de app via een andere webwinkel aanschaft, verwerkt die verkoper de betaling
+    volgens zijn eigen privacybeleid.
+  </p>
+
+  <!-- ===== 6. HERROEPINGSRECHT / REFUND ===== -->
+  <h2>6. Herroepingsrecht & refund</h2>
+
+  <div class="callout warn">
+    <strong>Belangrijk — digitaal product:</strong> Volgens de Europese regelgeving
+    vervalt het herroepingsrecht van 14 dagen zodra je een digitaal product hebt
+    gedownload of geactiveerd, mits je hiermee vooraf hebt ingestemd.
+  </div>
+
+  <h3>6.1 Aankoop via de Microsoft Store</h3>
+  <p>
+    Microsoft hanteert zijn eigen refund-beleid. Meestal kun je binnen
+    <strong>14 dagen</strong> een refund aanvragen via je Microsoft-account.
+    Zie hiervoor:
+  </p>
+  <ul>
+    <li><a href="https://support.microsoft.com/account-billing/returning-items-you-bought-from-microsoft-store-for-exchange-or-refund-81629012-aa4a-bd40-63df-a7fd22b2d1fd" target="_blank" rel="noopener">Refund aanvragen — Microsoft Store</a></li>
+  </ul>
+
+  <h3>6.2 Aankoop via een andere verkoper</h3>
+  <p>
+    Neem contact op met de verkoper waar je de app hebt gekocht. Vermeld je ordernummer
+    en de reden van je refund-aanvraag.
+  </p>
+
+  <h3>6.3 Uitzonderingen</h3>
+  <p>
+    Refunds worden niet verleend bij:
+  </p>
+  <ul>
+    <li>Misbruik van het refund-systeem (herhaaldelijke aankopen en refunds).</li>
+    <li>Het schenden van de licentievoorwaarden.</li>
+  </ul>
+
+  <!-- ===== 7. LICENTIE ===== -->
+  <h2>7. Licentie</h2>
+  <p>
+    Bij aankoop van de app ontvang je een <strong>persoonlijke, niet-overdraagbare licentie</strong>
+    voor onbeperkt gebruik van de applicatie. De licentie is gebonden aan het account
+    waarmee je de aankoop hebt gedaan (bijv. je Microsoft-account).
+  </p>
+  <p>
+    Het is niet toegestaan om:
+  </p>
+  <ul>
+    <li>De app te kopiëren, te verkopen of te verspreiden.</li>
+    <li>De app te reverse-engineeren of te wijzigen.</li>
+    <li>De app commercieel te exploiteren zonder schriftelijke toestemming.</li>
+  </ul>
+
+  <!-- ===== 8. DELEN MET DERDEN ===== -->
+  <h2>8. Delen met derden</h2>
+  <p>
+    Er worden <strong>geen gegevens gedeeld met derden</strong>. De app bevat geen
+    analytics, geen advertentienetwerken en geen externe trackers.
+  </p>
+  <p>
+    Uitzondering: als je de app via de Microsoft Store aanschaft, verwerkt Microsoft
+    de betalingstransactie volgens zijn eigen privacybeleid.
+  </p>
+
+  <!-- ===== 9. JOUW RECHTEN (AVG/GDPR) ===== -->
+  <h2>9. Jouw rechten (AVG/GDPR)</h2>
+  <p>
+    Omdat wij geen persoonsgegevens verwerken, is er ook niets om in te zien, te wijzigen
+    of te verwijderen. Je hebt volledige controle over je eigen bestanden op je eigen apparaat.
+  </p>
+  <p>
+    Voor vragen over de aankoop of licentie kun je contact opnemen via de
+    GitHub-repository (zie sectie 12).
+  </p>
+
+  <!-- ===== 10. BEVEILIGING ===== -->
+  <h2>10. Beveiliging</h2>
+  <p>
+    De app wordt aangeboden via <strong>HTTPS</strong>. Omdat alle verwerking lokaal
+    plaatsvindt, is er geen risico op datalekken via onze infrastructuur — er is simpelweg
+    geen datastroom naar buiten.
+  </p>
+
+  <!-- ===== 11. KINDEREN ===== -->
+  <h2>11. Kinderen</h2>
+  <p>
+    De app is geschikt voor alle leeftijden en verzamelt geen gegevens van minderjarigen.
+    Voor aankopen door minderjarigen is toestemming van een ouder of voogd vereist.
+  </p>
+
+  <!-- ===== 12. CONTACT ===== -->
+  <h2>12. Contact</h2>
+  <p>
+    Vragen over privacy, aankoop of licentie? Neem contact op via de GitHub-repository:
+  </p>
+  <p>
+    <a href="https://github.com/groenklimaat/SVG-JPG-PNG-Converter" target="_blank" rel="noopener">
+      github.com/groenklimaat/SVG-JPG-PNG-Converter
+    </a>
+  </p>
+
+  <!-- ===== 13. WIJZIGINGEN ===== -->
+  <h2>13. Wijzigingen</h2>
+  <p>
+    Deze privacyverklaring kan worden bijgewerkt wanneer de app wordt uitgebreid of
+    wanneer wetgeving daarom vraagt. De meest recente versie is altijd op deze pagina
+    te vinden. Bij ingrijpende wijzigingen word je via de app op de hoogte gesteld.
+  </p>
+
+  <!-- ===== OVERZICHT ===== -->
+  <h2>Overzicht in één tabel</h2>
+  <table class="info-table">
+    <tr>
+      <th>Onderwerp</th>
+      <th>Wat wij doen</th>
+    </tr>
+    <tr>
+      <td>Persoonsgegevens</td>
+      <td>Wij verzamelen er geen</td>
+    </tr>
+    <tr>
+      <td>Afbeeldingen</td>
+      <td>Blijven lokaal op je apparaat</td>
+    </tr>
+    <tr>
+      <td>Tracking-cookies</td>
+      <td>Geen</td>
+    </tr>
+    <tr>
+      <td>Analytics</td>
+      <td>Geen</td>
+    </tr>
+    <tr>
+      <td>Advertenties</td>
+      <td>Geen</td>
+    </tr>
+    <tr>
+      <td>Account vereist</td>
+      <td>Nee</td>
+    </tr>
+    <tr>
+      <td>Internet nodig</td>
+      <td>Alleen voor installatie / eerste keer laden</td>
+    </tr>
+    <tr>
+      <td>Prijs</td>
+      <td>€2,00 eenmalig — geen abonnement</td>
+    </tr>
+    <tr>
+      <td>Refund</td>
+      <td>Via Microsoft Store of verkoper — zie sectie 6</td>
+    </tr>
+    <tr>
+      <td>Delen met derden</td>
+      <td>Alleen betaalverwerking via Microsoft of verkoper</td>
+    </tr>
+  </table>
+
+  <!-- ===== LAATST BIJGEWERKT ===== -->
+  <div class="callout gold">
+    <strong>Laatst bijgewerkt:</strong> 2026 — Versie 1.0
+  </div>
+
+  <!-- ===== TERUG ===== -->
+  <a class="back-btn" href="index.html">← Terug naar de converter</a>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer">
+    <span class="crown">👑</span>
+    <div>Gemaakt door <span class="name">groenklimaat</span><span class="pro-tag">PRO 4K</span></div>
+    <div style="margin-top:6px;">Eenmalige aankoop €2 — geen abonnement, geen advertenties</div>
+    <div style="margin-top:6px;">© 2026 — Alle rechten voorbehouden</div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SVG/JPG/PNG Pro 4K Converter</title>
+<meta name="description" content="Convert SVG, JPG and PNG to any size, including 4K. One-time purchase, fully offline, no upload.">
+
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#15803d">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="icon_192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon_512x512.png">
+<link rel="apple-touch-icon" href="icon_192x192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pro 4K">
+<meta name="application-name" content="SVG/JPG/PNG Pro 4K Converter">
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-900: #052e16;
+    --green-700: #15803d;
+    --green-500: #22c55e;
+    --green-100: #d1fae5;
+    --green-50: #ecfdf5;
+    --gold-500: #f5c542;
+    --gold-700: #d4a017;
+    --ink: #1a202c;
+    --muted: #666;
+    --line: #e5e7eb;
+    --bg: #f0f4f8;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    padding: 30px 16px;
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 38px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  }
+
+  /* ===== PWA BANNER ===== */
+  .pwa-banner {
+    display: none;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, var(--green-900), var(--green-700));
+    color: #fff;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 22px rgba(5,46,22,0.25);
+  }
+  .pwa-banner.show { display: flex; }
+  .pwa-banner .pwa-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .pwa-banner .pwa-text { flex: 1; font-size: 14px; line-height: 1.35; }
+  .pwa-banner .pwa-text strong {
+    display: block;
+    color: #fff4b8;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  .pwa-banner button {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 10px;
+    background: var(--gold-500);
+    color: var(--green-900);
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.15s;
+    white-space: nowrap;
+  }
+  .pwa-banner button:hover { transform: translateY(-1px); }
+  .pwa-banner .dismiss {
+    background: transparent;
+    color: #fff;
+    font-size: 18px;
+    padding: 4px 8px;
+    opacity: 0.7;
+  }
+  .pwa-banner .dismiss:hover { opacity: 1; }
+
+  /* ===== OFFLINE ===== */
+  .offline-indicator {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: #fef3c7;
+    color: #7a5900;
+    border-left: 4px solid var(--gold-700);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .offline-indicator.show { display: flex; }
+
+  /* ===== HEADER ===== */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-bottom: 28px;
+    border-bottom: 3px solid var(--green-500);
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    box-shadow: 0 8px 26px rgba(5,46,22,0.3);
+    flex-shrink: 0;
+  }
+  .header-text { flex: 1; min-width: 220px; }
+  .header-text h1 {
+    font-size: 30px;
+    color: #14532d;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+  }
+  .header-text h1 .pro {
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+  }
+  .header-text p { color: var(--muted); font-size: 14px; }
+  .tagline-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tagline {
+    display: inline-block;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+    color: #4a3000;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+  }
+  .tagline.dark {
+    background: linear-gradient(135deg, #0f5132, var(--green-700));
+    color: #fff4b8;
+  }
+  .tagline.price {
+    background: linear-gradient(135deg, #f5c542, #d4a017);
+    color: #4a3000;
+    font-weight: 900;
+    box-shadow: 0 4px 12px rgba(245,197,66,0.4);
+  }
+
+  /* ===== SECTIONS ===== */
+  .section { margin-bottom: 28px; }
+  .section h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green-700);
+    font-weight: 700;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section h2::before {
+    content: "";
+    width: 4px;
+    height: 18px;
+    background: linear-gradient(180deg, var(--green-500), var(--green-700));
+    border-radius: 2px;
+  }
+
+  /* ===== FORM ===== */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 620px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .page { padding: 28px 20px; }
+    .logo { width: 84px; height: 84px; }
+    .header-text h1 { font-size: 22px; }
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #14532d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .field input, .field select {
+    padding: 11px 14px;
+    border: 1.5px solid var(--green-100);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #f8fafc;
+    transition: border 0.15s, background 0.15s;
+    width: 100%;
+  }
+  .field input:focus, .field select:focus {
+    outline: none;
+    border-color: var(--green-500);
+    background: #fff;
+  }
+  .field input[type="number"] {
+    font-family: "SF Mono", Consolas, monospace;
+  }
+
+  /* ===== PRESETS ===== */
+  .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .preset-btn {
+    padding: 7px 14px;
+    border: 1.5px solid var(--green-100);
+    background: #f8fafc;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #14532d;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .preset-btn:hover { background: var(--green-50); border-color: var(--green-500); }
+  .preset-btn.active {
+    background: var(--green-500);
+    color: #fff;
+    border-color: var(--green-500);
+  }
+  .preset-btn.k4 {
+    border-color: var(--gold-500);
+    background: linear-gradient(135deg, #fffbe6, #fef3c7);
+    color: #7a5900;
+    font-weight: 800;
+  }
+  .preset-btn.k4:hover {
+    background: linear-gradient(135deg, #fde047, var(--gold-500));
+    border-color: var(--gold-700);
+  }
+  .preset-btn.k4.active {
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+    color: #4a3000;
+    border-color: #a67c00;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    padding: 14px 26px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--green-700), var(--green-500));
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(34,197,94,0.3);
+    width: 100%;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(34,197,94,0.4);
+  }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-secondary {
+    background: #f8fafc;
+    color: #14532d;
+    border: 1.5px solid var(--green-100);
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  .btn-secondary:hover { background: var(--green-50); border-color: var(--green-500); }
+
+  /* ===== DROP ZONE ===== */
+  .drop-zone {
+    border: 3px dashed var(--green-100);
+    border-radius: 16px;
+    padding: 40px 20px;
+    text-align: center;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--green-500);
+    background: var(--green-50);
+  }
+  .drop-zone .icon { font-size: 48px; display: block; margin-bottom: 12px; }
+  .drop-zone .title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #14532d;
+    margin-bottom: 6px;
+  }
+  .drop-zone .sub { font-size: 13px; color: #888; }
+  .drop-zone input[type="file"] { display: none; }
+
+  /* ===== PREVIEW ===== */
+  .preview-wrap {
+    margin-top: 20px;
+    background: repeating-conic-gradient(#e5e7eb 0% 25%, #fff 0% 50%) 50% / 20px 20px;
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 180px;
+    border: 1.5px solid var(--line);
+    overflow: hidden;
+  }
+  .preview-wrap img {
+    max-width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.12));
+  }
+
+  /* ===== INFO ===== */
+  .info-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .info-chip {
+    background: #f8fafc;
+    border: 1px solid var(--green-100);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12.5px;
+    color: #14532d;
+  }
+  .info-chip strong { color: #0a3d1f; }
+
+  /* ===== RESULT ===== */
+  .result-box {
+    margin-top: 22px;
+    padding: 20px;
+    background: var(--green-50);
+    border: 2px solid var(--green-500);
+    border-radius: 14px;
+    display: none;
+  }
+  .result-box.show { display: block; }
+  .result-box h3 {
+    font-size: 14px;
+    color: #14532d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .result-img-wrap {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid var(--green-100);
+    margin-bottom: 14px;
+    overflow: auto;
+  }
+  .result-img-wrap img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  .result-meta {
+    font-size: 13px;
+    color: #14532d;
+    margin-bottom: 14px;
+    font-family: "SF Mono", Consolas, monospace;
+    background: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--green-100);
+  }
+  .result-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  /* ===== ERROR ===== */
+  .error-msg {
+    background: #fef2f2;
+    border: 2px solid #ef4444;
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: #991b1b;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 14px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 36px;
+    padding-top: 22px;
+    border-top: 2px dashed #d1d5db;
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+  }
+  .footer .crown { font-size: 26px; display: block; margin-bottom: 6px; }
+  .footer .name { color: var(--green-700); font-weight: 700; }
+  .footer .pro-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 8px;
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+    color: #4a3000;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+  .footer a {
+    color: var(--green-700);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .footer a:hover { text-decoration: underline; }
+
+  /* ===== UPDATE-TOAST ===== */
+  .update-toast {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--green-900);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+    z-index: 9999;
+    transition: transform 0.35s ease;
+    max-width: calc(100vw - 32px);
+  }
+  .update-toast.show { transform: translateX(-50%) translateY(0); }
+  .update-toast button {
+    background: var(--gold-500);
+    color: var(--green-900);
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; padding: 20px; border-radius: 0; }
+    .btn, .drop-zone, .presets, .pwa-banner, .update-toast { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== INSTALLATIE-BANNER ===== -->
+  <div class="pwa-banner" id="pwaBanner">
+    <svg class="pwa-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <defs>
+        <linearGradient id="pwaBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#052e16"/>
+          <stop offset="100%" stop-color="#15803d"/>
+        </linearGradient>
+        <linearGradient id="pwaGold" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fffbe6"/>
+          <stop offset="50%" stop-color="#f5c542"/>
+          <stop offset="100%" stop-color="#8a6400"/>
+        </linearGradient>
+      </defs>
+      <rect width="512" height="512" rx="112" fill="url(#pwaBg)"/>
+      <path d="M -60 18 L -60 -18 L -30 0 L 0 -30 L 30 0 L 60 -18 L 60 18 Z"
+            transform="translate(256 220)" fill="url(#pwaGold)"/>
+      <text x="256" y="400" font-family="system-ui" font-size="42" font-weight="900"
+            text-anchor="middle" fill="url(#pwaGold)">PRO 4K</text>
+    </svg>
+    <div class="pwa-text">
+      <strong>Installeer SVG/JPG/PNG Pro 4K Converter</strong>
+      Werkt offline, sneller en als losse app.
+    </div>
+    <button id="installBtn">Installeren</button>
+    <button class="dismiss" id="dismissBanner" aria-label="Sluiten">✕</button>
+  </div>
+
+  <!-- ===== OFFLINE-MELDING ===== -->
+  <div class="offline-indicator" id="offlineIndicator">
+    📴 Je bent offline — de converter blijft gewoon werken.
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <defs>
+        <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#052e16"/>
+          <stop offset="45%" stop-color="#0f5132"/>
+          <stop offset="100%" stop-color="#15803d"/>
+        </linearGradient>
+        <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fffbe6"/>
+          <stop offset="22%" stop-color="#fde047"/>
+          <stop offset="50%" stop-color="#f5c542"/>
+          <stop offset="78%" stop-color="#d4a017"/>
+          <stop offset="100%" stop-color="#8a6400"/>
+        </linearGradient>
+        <linearGradient id="goldText" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#fff4b8"/>
+          <stop offset="40%" stop-color="#f5c542"/>
+          <stop offset="100%" stop-color="#a67c00"/>
+        </linearGradient>
+        <linearGradient id="shineGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+          <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="goldShadow" x="-25%" y="-25%" width="150%" height="150%">
+          <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.45"/>
+        </filter>
+        <filter id="cardShadow" x="-15%" y="-15%" width="130%" height="140%">
+          <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.35"/>
+        </filter>
+        <linearGradient id="cardInner" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="100%" stop-color="#f1f5f9"/>
+        </linearGradient>
+      </defs>
+
+      <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+      <circle cx="256" cy="256" r="235" fill="none" stroke="#f5c542" stroke-opacity="0.15" stroke-width="2"/>
+      <circle cx="256" cy="256" r="205" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1.5"/>
+      <circle cx="256" cy="256" r="175" fill="none" stroke="#f5c542" stroke-opacity="0.08" stroke-width="1"/>
+      <g fill="#fde047" opacity="0.5">
+        <circle cx="88" cy="130" r="2.5"/>
+        <circle cx="430" cy="120" r="2"/>
+        <circle cx="72" cy="400" r="2"/>
+        <circle cx="448" cy="410" r="2.5"/>
+      </g>
+      <rect width="512" height="240" rx="112" fill="url(#shineGrad)" opacity="0.4"/>
+
+      <!-- Kroon -->
+      <g transform="translate(256 78)" filter="url(#goldShadow)">
+        <path d="M -82 24 L -82 -26 L -44 -2 L 0 -44 L 44 -2 L 82 -26 L 82 24 Z"
+              fill="url(#goldGrad)" stroke="#5c4300" stroke-width="3" stroke-linejoin="round"/>
+        <rect x="-88" y="26" width="176" height="18" rx="8"
+              fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2.5"/>
+        <circle cx="-82" cy="-30" r="10" fill="#fffbe6" stroke="#5c4300" stroke-width="2"/>
+        <circle cx="0" cy="-48" r="10" fill="#fffbe6" stroke="#5c4300" stroke-width="2"/>
+        <circle cx="82" cy="-30" r="10" fill="#fffbe6" stroke="#5c4300" stroke-width="2"/>
+        <circle cx="0" cy="35" r="6" fill="#ef4444" stroke="#5c4300" stroke-width="1.8"/>
+        <circle cx="-2" cy="33" r="1.8" fill="#ffb3b3"/>
+        <path d="M -82 -26 L -82 -36 L -78 -30 L -74 -36 L -74 -26 Z" fill="#fffbe6"/>
+        <path d="M 0 -44 L 0 -54 L 4 -48 L 8 -54 L 8 -44 Z" fill="#fffbe6"/>
+        <path d="M 82 -26 L 82 -36 L 86 -30 L 90 -36 L 90 -26 Z" fill="#fffbe6"/>
+      </g>
+
+      <!-- SVG kaart -->
+      <g filter="url(#cardShadow)">
+        <rect x="146" y="158" width="220" height="84" rx="22" fill="url(#cardInner)"/>
+        <rect x="146" y="158" width="220" height="84" rx="22" fill="none"
+              stroke="#d4a017" stroke-width="2.5"/>
+        <text x="256" y="203" font-family="system-ui, sans-serif"
+              font-size="48" font-weight="900" text-anchor="middle" dominant-baseline="central"
+              fill="url(#goldText)" stroke="#5c4300" stroke-width="1.8"
+              paint-order="stroke fill">SVG</text>
+      </g>
+
+      <!-- JPG kaart -->
+      <g filter="url(#cardShadow)">
+        <rect x="42" y="340" width="200" height="84" rx="22" fill="url(#cardInner)"/>
+        <rect x="42" y="340" width="200" height="84" rx="22" fill="none"
+              stroke="#d4a017" stroke-width="2.5"/>
+        <text x="142" y="385" font-family="system-ui, sans-serif"
+              font-size="46" font-weight="900" text-anchor="middle" dominant-baseline="central"
+              fill="url(#goldText)" stroke="#5c4300" stroke-width="1.8"
+              paint-order="stroke fill">JPG</text>
+      </g>
+
+      <!-- PNG kaart -->
+      <g filter="url(#cardShadow)">
+        <rect x="270" y="340" width="200" height="84" rx="22" fill="url(#cardInner)"/>
+        <rect x="270" y="340" width="200" height="84" rx="22" fill="none"
+              stroke="#d4a017" stroke-width="2.5"/>
+        <text x="370" y="385" font-family="system-ui, sans-serif"
+              font-size="46" font-weight="900" text-anchor="middle" dominant-baseline="central"
+              fill="url(#goldText)" stroke="#5c4300" stroke-width="1.8"
+              paint-order="stroke fill">PNG</text>
+      </g>
+
+      <!-- Conversie pijl -->
+      <g transform="translate(256 282)" filter="url(#goldShadow)">
+        <rect x="-12" y="-40" width="24" height="56" rx="6"
+              fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2.5"/>
+        <path d="M -28 -8 L 0 26 L 28 -8 Z"
+              fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M -15 -2 L 0 18 L 15 -2 Z" fill="#fffbe6" opacity="0.55"/>
+      </g>
+
+      <!-- 4K badge -->
+      <g transform="translate(402 138)" filter="url(#neonGlow)">
+        <circle cx="0" cy="0" r="52" fill="#052e16" stroke="url(#goldGrad)" stroke-width="4"/>
+        <circle cx="0" cy="0" r="44" fill="none" stroke="#f5c542" stroke-opacity="0.5" stroke-width="1.5"/>
+        <path d="M -38 -18 A 44 44 0 0 1 38 -18 A 44 44 0 0 0 -38 -18 Z"
+              fill="#ffffff" opacity="0.12"/>
+        <text x="0" y="3" font-family="system-ui, sans-serif"
+              font-size="38" font-weight="900" text-anchor="middle" dominant-baseline="central"
+              fill="url(#goldText)" stroke="#5c4300" stroke-width="1.6"
+              paint-order="stroke fill">4K</text>
+      </g>
+
+      <!-- PRO banner -->
+      <g transform="translate(256 458)">
+        <rect x="-92" y="-20" width="184" height="40" rx="20"
+              fill="#052e16" stroke="url(#goldGrad)" stroke-width="2.5"/>
+        <rect x="-92" y="-20" width="184" height="20" rx="20" fill="#ffffff" opacity="0.08"/>
+        <text x="0" y="1" font-family="system-ui, sans-serif"
+              font-size="22" font-weight="900" text-anchor="middle" dominant-baseline="central"
+              letter-spacing="8" fill="url(#goldText)"
+              stroke="#5c4300" stroke-width="1.2" paint-order="stroke fill">PRO</text>
+        <path d="M -72 0 L -68 -5 L -64 0 L -68 5 Z" fill="#fde047"/>
+        <path d="M 72 0 L 68 -5 L 64 0 L 68 5 Z" fill="#fde047"/>
+      </g>
+
+      <!-- 4K resolutie -->
+      <text x="256" y="494" font-family="system-ui, sans-serif"
+            font-size="10" font-weight="700" text-anchor="middle"
+            letter-spacing="4" fill="#f5c542" opacity="0.85">3840 × 2160</text>
+    </svg>
+
+    <div class="header-text">
+      <h1>SVG/JPG/PNG <span class="pro">Pro 4K</span> Converter</h1>
+      <p>Vierkant, rechthoekig & 4K — volledig instelbaar</p>
+      <div class="tagline-row">
+        <span class="tagline">👑 PRO</span>
+        <span class="tagline dark">🎬 4K READY</span>
+        <span class="tagline dark">📴 OFFLINE</span>
+        <span class="tagline price">💎 €2 — EENMALIG</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STAP 1 ===== -->
+  <div class="section">
+    <h2>Stap 1 — Kies een bestand</h2>
+    <div class="drop-zone" id="dropZone">
+      <span class="icon">📁</span>
+      <div class="title">Sleep een SVG, JPG of PNG hierheen</div>
+      <div class="sub">of klik om te bladeren — max. 20 MB</div>
+      <input type="file" id="fileInput" accept=".svg,.jpg,.jpeg,.png,image/svg+xml,image/jpeg,image/png">
+    </div>
+
+    <div class="preview-wrap" id="previewWrap" style="display:none;">
+      <img id="previewImg" alt="Voorbeeld">
+    </div>
+
+    <div class="info-row" id="infoRow" style="display:none;">
+      <div class="info-chip">📄 <strong id="infoName">—</strong></div>
+      <div class="info-chip">📐 Origineel: <strong id="infoSize">—</strong></div>
+      <div class="info-chip">🎨 Type: <strong id="infoType">—</strong></div>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <!-- ===== STAP 2 ===== -->
+  <div class="section">
+    <h2>Stap 2 — Afmetingen (vierkant, rechthoekig of 4K)</h2>
+
+    <div class="presets" id="presets">
+      <button class="preset-btn k4" data-w="3840" data-h="2160">📺 4K UHD 3840×2160</button>
+      <button class="preset-btn k4" data-w="4096" data-h="2160">🎬 DCI 4K 4096×2160</button>
+      <button class="preset-btn" data-w="2560" data-h="1440">🖥️ QHD 2560×1440</button>
+      <button class="preset-btn" data-w="1920" data-h="1080">💻 Full HD 1920×1080</button>
+      <button class="preset-btn" data-w="1080" data-h="1080">⬛ Vierkant 1080×1080</button>
+      <button class="preset-btn" data-w="1080" data-h="1920">📱 Story 1080×1920</button>
+      <button class="preset-btn" data-w="1200" data-h="630">🔗 OG 1200×630</button>
+      <button class="preset-btn" data-w="800" data-h="600">🖼️ 800×600</button>
+      <button class="preset-btn" data-w="512" data-h="512">🟩 512×512</button>
+    </div>
+
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="field">
+        <label for="widthInput">Breedte (px)</label>
+        <input type="number" id="widthInput" min="1" max="10000" value="3840" placeholder="bv. 3840">
+      </div>
+      <div class="field">
+        <label for="heightInput">Hoogte (px)</label>
+        <input type="number" id="heightInput" min="1" max="10000" value="2160" placeholder="bv. 2160">
+      </div>
+    </div>
+
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="field">
+        <label for="formatSelect">Uitvoerformaat</label>
+        <select id="formatSelect">
+          <option value="png">PNG (verliesvrij, transparantie)</option>
+          <option value="jpeg">JPG / JPEG (kleiner, geen transparantie)</option>
+          <option value="webp">WEBP (modern, klein)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="qualityInput">JPG/WEBP kwaliteit: <span id="qualityVal">92</span>%</label>
+        <input type="range" id="qualityInput" min="10" max="100" value="92" style="padding:0; height:42px;">
+      </div>
+    </div>
+
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="field">
+        <label for="fitSelect">Passend maken</label>
+        <select id="fitSelect">
+          <option value="contain">Contain — volledig zichtbaar, met marge</option>
+          <option value="cover">Cover — vult alles, snijdt indien nodig</option>
+          <option value="stretch">Stretch — vervormt naar exacte maat</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="bgInput">Achtergrond (voor JPG/transparantie)</label>
+        <input type="color" id="bgInput" value="#ffffff" style="height:42px; padding:4px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STAP 3 ===== -->
+  <div class="section">
+    <h2>Stap 3 — Converteren</h2>
+    <button class="btn btn-primary" id="convertBtn" disabled>
+      🚀 Converteer naar gekozen formaat & maat
+    </button>
+  </div>
+
+  <!-- ===== RESULTAAT ===== -->
+  <div class="result-box" id="resultBox">
+    <h3>✅ Resultaat</h3>
+    <div class="result-img-wrap">
+      <img id="resultImg" alt="Geconverteerd resultaat">
+    </div>
+    <div class="result-meta" id="resultMeta">—</div>
+    <div class="result-actions">
+      <button class="btn btn-secondary" id="downloadBtn">💾 Download</button>
+      <button class="btn btn-secondary" id="newBtn">🔄 Nieuw bestand</button>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer">
+    <span class="crown">👑</span>
+    <div>Gemaakt door <span class="name">groenklimaat</span><span class="pro-tag">PRO 4K</span></div>
+    <div style="margin-top:6px;">Eenmalige aankoop €2 — geen abonnement, geen advertenties</div>
+    <div style="margin-top:6px;">
+      <a href="privacy.html">Privacyverklaring</a> · © 2026 — Alle rechten voorbehouden
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== UPDATE-TOAST ===== -->
+<div class="update-toast" id="updateToast">
+  <span>🔄 Nieuwe versie beschikbaar</span>
+  <button id="reloadBtn">Herladen</button>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============================================================
+     1. SERVICE WORKER
+     ============================================================ */
+  if ("serviceWorker" in navigator) {
+    let refreshing = false;
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./serviceworker.js", { scope: "./" })
+        .then((reg) => {
+          console.log("[PWA] Service Worker geregistreerd:", reg.scope);
+
+          reg.addEventListener("updatefound", () => {
+            const newWorker = reg.installing;
+            if (!newWorker) return;
+
+            newWorker.addEventListener("statechange", () => {
+              if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                document.getElementById("updateToast").classList.add("show");
+              }
+            });
+          });
+        })
+        .catch((err) => console.warn("[PWA] SW-registratie mislukt:", err));
+    });
+
+    document.getElementById("reloadBtn").addEventListener("click", () => {
+      navigator.serviceWorker.getRegistration().then((reg) => {
+        if (reg && reg.waiting) {
+          reg.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+      });
+    });
+  }
+
+  /* ============================================================
+     2. INSTALLATIE-PROMPT
+     ============================================================ */
+  let deferredPrompt = null;
+  const pwaBanner = document.getElementById("pwaBanner");
+  const installBtn = document.getElementById("installBtn");
+  const dismissBanner = document.getElementById("dismissBanner");
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (!localStorage.getItem("pwa-banner-dismissed")) {
+      pwaBanner.classList.add("show");
+    }
+  });
+
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log("[PWA] Installatie-keuze:", outcome);
+    deferredPrompt = null;
+    pwaBanner.classList.remove("show");
+  });
+
+  dismissBanner.addEventListener("click", () => {
+    pwaBanner.classList.remove("show");
+    localStorage.setItem("pwa-banner-dismissed", "1");
+  });
+
+  window.addEventListener("appinstalled", () => {
+    console.log("[PWA] App geïnstalleerd");
+    pwaBanner.classList.remove("show");
+    deferredPrompt = null;
+  });
+
+  /* ============================================================
+     3. OFFLINE-INDICATOR
+     ============================================================ */
+  const offlineIndicator = document.getElementById("offlineIndicator");
+  function updateOnlineStatus() {
+    offlineIndicator.classList.toggle("show", !navigator.onLine);
+  }
+  window.addEventListener("online", updateOnlineStatus);
+  window.addEventListener("offline", updateOnlineStatus);
+  updateOnlineStatus();
+
+  /* ============================================================
+     4. CONVERTER
+     ============================================================ */
+  const dropZone     = document.getElementById("dropZone");
+  const fileInput    = document.getElementById("fileInput");
+  const previewWrap  = document.getElementById("previewWrap");
+  const previewImg   = document.getElementById("previewImg");
+  const infoRow      = document.getElementById("infoRow");
+  const infoName     = document.getElementById("infoName");
+  const infoSize     = document.getElementById("infoSize");
+  const infoType     = document.getElementById("infoType");
+  const errorMsg     = document.getElementById("errorMsg");
+
+  const widthInput   = document.getElementById("widthInput");
+  const heightInput  = document.getElementById("heightInput");
+  const formatSelect = document.getElementById("formatSelect");
+  const qualityInput = document.getElementById("qualityInput");
+  const qualityVal   = document.getElementById("qualityVal");
+  const fitSelect    = document.getElementById("fitSelect");
+  const bgInput      = document.getElementById("bgInput");
+  const presets      = document.getElementById("presets");
+
+  const convertBtn   = document.getElementById("convertBtn");
+  const resultBox    = document.getElementById("resultBox");
+  const resultImg    = document.getElementById("resultImg");
+  const resultMeta   = document.getElementById("resultMeta");
+  const downloadBtn  = document.getElementById("downloadBtn");
+  const newBtn       = document.getElementById("newBtn");
+
+  let currentFile = null;
+  let currentImage = null;
+  let currentIsSVG = false;
+  let currentSVGText = null;
+  let resultBlob = null;
+  let resultURL = null;
+
+  function showError(msg) {
+    errorMsg.textContent = "⚠️ " + msg;
+    errorMsg.classList.add("show");
+  }
+  function clearError() {
+    errorMsg.textContent = "";
+    errorMsg.classList.remove("show");
+  }
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / 1048576).toFixed(2) + " MB";
+  }
+  function getExtension(mime) {
+    if (mime === "image/png") return "png";
+    if (mime === "image/jpeg") return "jpg";
+    if (mime === "image/webp") return "webp";
+    return "png";
+  }
+
+  qualityInput.addEventListener("input", () => {
+    qualityVal.textContent = qualityInput.value;
+  });
+
+  presets.addEventListener("click", (e) => {
+    const btn = e.target.closest(".preset-btn");
+    if (!btn) return;
+    presets.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    widthInput.value = btn.dataset.w;
+    heightInput.value = btn.dataset.h;
+  });
+
+  dropZone.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", (e) => {
+    if (e.target.files.length) handleFile(e.target.files[0]);
+  });
+
+  ["dragenter", "dragover"].forEach(ev => {
+    dropZone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropZone.classList.add("dragover");
+    });
+  });
+  ["dragleave", "drop"].forEach(ev => {
+    dropZone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+    });
+  });
+  dropZone.addEventListener("drop", (e) => {
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  });
+
+  function handleFile(file) {
+    clearError();
+    resultBox.classList.remove("show");
+
+    const validTypes = ["image/svg+xml", "image/jpeg", "image/png"];
+    if (!validTypes.includes(file.type) && !file.name.match(/\.(svg|jpg|jpeg|png)$/i)) {
+      showError("Ongeldig bestandstype. Kies een SVG, JPG of PNG.");
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      showError("Bestand is groter dan 20 MB.");
+      return;
+    }
+
+    currentFile = file;
+    currentIsSVG = file.type === "image/svg+xml" || file.name.toLowerCase().endsWith(".svg");
+
+    infoName.textContent = file.name;
+    infoSize.textContent = formatBytes(file.size);
+    infoType.textContent = currentIsSVG ? "SVG (vector)" : file.type.replace("image/", "").toUpperCase();
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataURL = ev.target.result;
+      currentSVGText = currentIsSVG ? dataURL : null;
+
+      const img = new Image();
+      img.onload = () => {
+        currentImage = img;
+
+        if (currentIsSVG) {
+          try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(atob(dataURL.split(",")[1]), "image/svg+xml");
+            const svgEl = doc.querySelector("svg");
+            let w = svgEl.getAttribute("width");
+            let h = svgEl.getAttribute("height");
+            const vb = svgEl.getAttribute("viewBox");
+            if ((!w || !h) && vb) {
+              const parts = vb.split(/[\s,]+/);
+              if (parts.length === 4) { w = parts[2]; h = parts[3]; }
+            }
+            w = parseFloat(w) || img.width || 300;
+            h = parseFloat(h) || img.height || 150;
+            infoSize.textContent = Math.round(w) + " × " + Math.round(h) + " px (vector)";
+            if (widthInput.value === "3840" && heightInput.value === "2160") {
+              widthInput.value = Math.round(w);
+              heightInput.value = Math.round(h);
+            }
+          } catch (err) {
+            infoSize.textContent = "vector";
+          }
+        } else {
+          infoSize.textContent = img.naturalWidth + " × " + img.naturalHeight + " px";
+          if (widthInput.value === "3840" && heightInput.value === "2160") {
+            widthInput.value = img.naturalWidth;
+            heightInput.value = img.naturalHeight;
+          }
+        }
+
+        previewImg.src = dataURL;
+        previewWrap.style.display = "flex";
+        infoRow.style.display = "flex";
+        convertBtn.disabled = false;
+      };
+      img.onerror = () => showError("Kan afbeelding niet laden. Probeer een ander bestand.");
+      img.src = dataURL;
+    };
+    reader.onerror = () => showError("Kan bestand niet lezen.");
+    reader.readAsDataURL(file);
+  }
+
+  convertBtn.addEventListener("click", () => {
+    if (!currentImage) return;
+    clearError();
+
+    const targetW = parseInt(widthInput.value, 10);
+    const targetH = parseInt(heightInput.value, 10);
+    if (!targetW || !targetH || targetW < 1 || targetH < 1 || targetW > 10000 || targetH > 10000) {
+      showError("Voer geldige afmetingen in (1–10000 px).");
+      return;
+    }
+
+    const format = formatSelect.value;
+    const mime   = format === "jpeg" ? "image/jpeg" : (format === "webp" ? "image/webp" : "image/png");
+    const quality = parseInt(qualityInput.value, 10) / 100;
+    const fit = fitSelect.value;
+    const bg = bgInput.value;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = targetW;
+    canvas.height = targetH;
+    const ctx = canvas.getContext("2d");
+
+    if (format === "jpeg" || bg !== "#ffffff") {
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, targetW, targetH);
+    }
+
+    let srcW, srcH;
+    if (currentIsSVG && currentSVGText) {
+      srcW = currentImage.naturalWidth || currentImage.width || 300;
+      srcH = currentImage.naturalHeight || currentImage.height || 150;
+    } else {
+      srcW = currentImage.naturalWidth;
+      srcH = currentImage.naturalHeight;
+    }
+
+    let drawW, drawH, dx, dy;
+    if (fit === "stretch") {
+      drawW = targetW;
+      drawH = targetH;
+      dx = 0;
+      dy = 0;
+    } else {
+      const scaleX = targetW / srcW;
+      const scaleY = targetH / srcH;
+      const scale = (fit === "cover") ? Math.max(scaleX, scaleY) : Math.min(scaleX, scaleY);
+      drawW = srcW * scale;
+      drawH = srcH * scale;
+      dx = (targetW - drawW) / 2;
+      dy = (targetH - drawH) / 2;
+    }
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    try {
+      ctx.drawImage(currentImage, dx, dy, drawW, drawH);
+    } catch (err) {
+      showError("Fout bij tekenen: " + err.message);
+      return;
+    }
+
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        showError("Conversie mislukt. Probeer een ander formaat.");
+        return;
+      }
+      if (resultURL) URL.revokeObjectURL(resultURL);
+      resultBlob = blob;
+      resultURL = URL.createObjectURL(blob);
+
+      resultImg.src = resultURL;
+      resultMeta.textContent =
+        "Formaat: " + mime.replace("image/", "").toUpperCase() +
+        " · " + targetW + " × " + targetH + " px" +
+        " · " + formatBytes(blob.size) +
+        (format !== "png" ? " · kwaliteit " + Math.round(quality * 100) + "%" : "");
+
+      resultBox.classList.add("show");
+      resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, mime, format === "png" ? undefined : quality);
+  });
+
+  downloadBtn.addEventListener("click", () => {
+    if (!resultBlob) return;
+    const ext = getExtension(resultBlob.type);
+    const base = (currentFile?.name || "afbeelding").replace(/\.[^.]+$/, "");
+    const a = document.createElement("a");
+    a.href = resultURL;
+    a.download = base + "_" + widthInput.value + "x" + heightInput.value + "." + ext;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+
+  newBtn.addEventListener("click", () => {
+    currentFile = null;
+    currentImage = null;
+    currentSVGText = null;
+    currentIsSVG = false;
+    resultBlob = null;
+    if (resultURL) { URL.revokeObjectURL(resultURL); resultURL = null; }
+    fileInput.value = "";
+    previewWrap.style.display = "none";
+    infoRow.style.display = "none";
+    resultBox.classList.remove("show");
+    convertBtn.disabled = true;
+    clearError();
+    widthInput.value = "3840";
+    heightInput.value = "2160";
+    presets.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+  });
+
+  /* ============================================================
+     5. URL-ACTIES (shortcuts uit manifest)
+     ============================================================ */
+  const params = new URLSearchParams(location.search);
+  const action = params.get("action");
+  if (action === "4k") {
+    widthInput.value = "3840";
+    heightInput.value = "2160";
+  }
+  if (action === "convert") {
+    dropZone.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+})();
+</script>
+</body>
+</html>

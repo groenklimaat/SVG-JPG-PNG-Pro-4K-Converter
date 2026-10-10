@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Offline — SVG/JPG/PNG Pro 4K Converter</title>
+<meta name="description" content="Je bent offline. De SVG/JPG/PNG Pro 4K Converter werkt normaal gesproken volledig offline — open de app één keer met internet om alles te cachen.">
+<meta name="theme-color" content="#15803d">
+<meta name="color-scheme" content="light dark">
+
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon_192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon_512x512.png">
+<link rel="apple-touch-icon" href="icon_192x192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pro 4K">
+<meta name="application-name" content="SVG/JPG/PNG Pro 4K Converter">
+<meta name="robots" content="noindex">
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-900: #052e16;
+    --green-700: #15803d;
+    --green-500: #22c55e;
+    --green-100: #d1fae5;
+    --green-50: #ecfdf5;
+    --gold-500: #f5c542;
+    --gold-700: #d4a017;
+    --ink: #1a202c;
+    --muted: #666;
+    --bg: #f0f4f8;
+  }
+
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 16px;
+    color: var(--ink);
+    line-height: 1.55;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .card {
+    max-width: 520px;
+    width: 100%;
+    background: #fff;
+    border-radius: 20px;
+    padding: 46px 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+
+  @media (max-width: 520px) {
+    .card { padding: 34px 24px; }
+  }
+
+  /* ===== LOGO ===== */
+  .icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 22px;
+    border-radius: 26px;
+    display: block;
+    box-shadow: 0 10px 30px rgba(5,46,22,0.3);
+  }
+
+  /* ===== HEADER ===== */
+  h1 {
+    font-size: 26px;
+    color: #14532d;
+    margin-bottom: 8px;
+    letter-spacing: -0.4px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+    color: #4a3000;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.6px;
+    margin-bottom: 20px;
+  }
+
+  /* ===== TEKST ===== */
+  p {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  p strong { color: #14532d; }
+
+  /* ===== BUTTON ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--green-700), var(--green-500));
+    color: #fff;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(34,197,94,0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(34,197,94,0.4);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  /* ===== TIP BOX ===== */
+  .tip {
+    margin-top: 24px;
+    padding: 14px 16px;
+    background: var(--green-50);
+    border-left: 4px solid var(--green-500);
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #14532d;
+    text-align: left;
+    line-height: 1.55;
+  }
+  .tip strong {
+    display: block;
+    color: #0a3d1f;
+    margin-bottom: 4px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== STATUSBALK ===== */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 8px 16px;
+    background: #fef3c7;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #7a5900;
+  }
+  .status.online {
+    background: var(--green-50);
+    color: #14532d;
+  }
+  .status .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    animation: pulse 1.5s infinite;
+  }
+  .status.online .dot {
+    background: var(--green-500);
+    animation: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 34px;
+    padding-top: 20px;
+    border-top: 2px dashed #d1d5db;
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+  }
+  .footer .crown { font-size: 22px; display: block; margin-bottom: 4px; }
+  .footer .name { color: var(--green-700); font-weight: 700; }
+  .footer .pro-tag {
+    display: inline-block;
+    margin-left: 5px;
+    padding: 2px 7px;
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+    color: #4a3000;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== PRINT ===== */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .card { box-shadow: none; padding: 20px; }
+    .btn, .status { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- ===== LOGO ===== -->
+  <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <defs>
+      <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#052e16"/>
+        <stop offset="45%" stop-color="#0f5132"/>
+        <stop offset="100%" stop-color="#15803d"/>
+      </linearGradient>
+      <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#fffbe6"/>
+        <stop offset="50%" stop-color="#f5c542"/>
+        <stop offset="100%" stop-color="#8a6400"/>
+      </linearGradient>
+    </defs>
+    <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+    <circle cx="256" cy="256" r="235" fill="none" stroke="#f5c542" stroke-opacity="0.15" stroke-width="2"/>
+    <circle cx="256" cy="256" r="205" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1.5"/>
+
+    <!-- Kroon -->
+    <g transform="translate(256 130)" filter="drop-shadow(0 3px 4px rgba(0,0,0,0.4))">
+      <path d="M -68 20 L -68 -22 L -36 -2 L 0 -36 L 36 -2 L 68 -22 L 68 20 Z"
+            fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2.5" stroke-linejoin="round"/>
+      <rect x="-74" y="22" width="148" height="14" rx="7"
+            fill="url(#goldGrad)" stroke="#5c4300" stroke-width="2"/>
+      <circle cx="-68" cy="-24" r="8" fill="#fffbe6" stroke="#5c4300" stroke-width="1.6"/>
+      <circle cx="0" cy="-40" r="8" fill="#fffbe6" stroke="#5c4300" stroke-width="1.6"/>
+      <circle cx="68" cy="-24" r="8" fill="#fffbe6" stroke="#5c4300" stroke-width="1.6"/>
+    </g>
+
+    <!-- Wolk (offline icoon) -->
+    <path d="M 160 330 Q 120 330 120 290 Q 120 250 160 250 Q 170 210 220 210 Q 280 210 290 260 Q 340 260 340 300 Q 340 330 300 330 Z"
+          fill="#ffffff" opacity="0.92"/>
+
+    <!-- Doorstreep -->
+    <line x1="150" y1="200" x2="362" y2="380"
+          stroke="#ef4444" stroke-width="20" stroke-linecap="round"/>
+
+    <!-- PRO 4K tekst -->
+    <text x="256" y="440" font-family="system-ui, sans-serif"
+          font-size="34" font-weight="900" text-anchor="middle"
+          fill="url(#goldGrad)" stroke="#5c4300" stroke-width="1.3"
+          paint-order="stroke fill">PRO 4K</text>
+  </svg>
+
+  <!-- ===== HEADER ===== -->
+  <h1>Je bent offline</h1>
+  <div class="badge">📴 GEEN VERBINDING</div>
+
+  <!-- ===== TEKST ===== -->
+  <p>
+    De <strong>SVG/JPG/PNG Pro 4K Converter</strong> werkt normaal gesproken
+    <strong>volledig offline</strong>, maar deze pagina is nog niet in de cache
+    opgeslagen.
+  </p>
+  <p>
+    Maak verbinding met internet en open de app <strong>één keer</strong>.
+    Daarna werkt alles offline — inclusief 4K-conversies.
+  </p>
+
+  <!-- ===== STATUS ===== -->
+  <div class="status" id="status">
+    <span class="dot"></span>
+    <span id="statusText">Geen internetverbinding</span>
+  </div>
+
+  <!-- ===== BUTTON ===== -->
+  <button class="btn" id="retryBtn">
+    🔄 Opnieuw proberen
+  </button>
+
+  <!-- ===== TIP ===== -->
+  <div class="tip">
+    <strong>💡 Tip</strong>
+    Voeg de app toe aan je beginscherm of installeer hem als app
+    (via het menu van je browser). Dan is hij altijd beschikbaar,
+    ook zonder internet.
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer">
+    <span class="crown">👑</span>
+    <div>Gemaakt door <span class="name">groenklimaat</span><span class="pro-tag">PRO 4K</span></div>
+    <div style="margin-top:4px;">© 2026 — Alle rechten voorbehouden</div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const status     = document.getElementById("status");
+  const statusText = document.getElementById("statusText");
+  const retryBtn   = document.getElementById("retryBtn");
+
+  /* ============================================================
+     1. STATUS — controleer online/offline
+     ============================================================ */
+  function updateStatus() {
+    if (navigator.onLine) {
+      status.classList.add("online");
+      statusText.textContent = "Verbonden — je kunt de app openen";
+    } else {
+      status.classList.remove("online");
+      statusText.textContent = "Geen internetverbinding";
+    }
+  }
+
+  window.addEventListener("online", updateStatus);
+  window.addEventListener("offline", updateStatus);
+  updateStatus();
+
+  /* ============================================================
+     2. OPNIEUW PROBEREN
+     ============================================================ */
+  retryBtn.addEventListener("click", () => {
+    retryBtn.textContent = "⏳ Laden…";
+    retryBtn.disabled = true;
+
+    // Als online: ga naar index.html
+    if (navigator.onLine) {
+      window.location.href = "./index.html";
+      return;
+    }
+
+    // Als offline: probeer het opnieuw via fetch, anders melding
+    fetch("./index.html", { method: "HEAD", cache: "no-store" })
+      .then((res) => {
+        if (res.ok) {
+          window.location.href = "./index.html";
+        } else {
+          throw new Error("Niet beschikbaar");
+        }
+      })
+      .catch(() => {
+        retryBtn.textContent = "🔄 Opnieuw proberen";
+        retryBtn.disabled = false;
+        statusText.textContent = "Nog steeds offline — probeer het later opnieuw";
+        status.classList.remove("online");
+      });
+  });
+
+  /* ============================================================
+     3. AUTOMATISCH HERLADEN ZODRA ONLINE
+     ============================================================ */
+  window.addEventListener("online", () => {
+    // Kleine vertraging zodat de verbinding stabiel is
+    setTimeout(() => {
+      window.location.href = "./index.html";
+    }, 800);
+  });
+
+})();
+</script>
+</body>
+</html>
