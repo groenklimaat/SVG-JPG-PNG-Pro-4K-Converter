@@ -49,6 +49,10 @@
       "icons": [{ "src": "icon_192x192.png", "sizes": "192x192", "type": "image/png" }]
     },
     {
+  "name": "SVG/JPG/PNG Pro 4K Converter",
+  "short_name": "Pro 4K Converter"
+}
+    {
       "name": "4K-formaat (3840×2160)",
       "short_name": "4K",
       "description": "Converteer direct naar 4K UHD",
