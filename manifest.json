@@ -1,7 +1,7 @@
 {
   "id": "/SVG-JPG-PNG-Converter/",
   "name": "SVG/JPG/PNG Pro 4K Converter",
-  "short_name": "Pro 4K Converter",
+  "short_name": "Pro 4K Converter"
   "description": "Convert SVG, JPG and PNG to square, rectangular or 4K dimensions (3840×2160). Fully offline in your browser — no upload, no account.",
   "start_url": "./index.html?source=pwa",
   "scope": "./",
