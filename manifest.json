@@ -1,64 +1,35 @@
-{
-  "name": "PNG Converter — Logo, JPG & SVG to PNG",
-  "short_name": "PNG Converter",
-  "description": "Convert a logo (PNG, JPG or SVG) to multiple PNG sizes with transparent background. Works fully offline. Available in 11 languages.",
-  "lang": "en",
-  "dir": "ltr",
+# Check that we're on a supported Windows version
+$currentWindowsVersion = (Get-WmiObject Win32_OperatingSystem).Version -as [Version]
+$minWindowsVersion = "10.0.19041" -as [Version]
+if ($currentWindowsVersion -And $currentWindowsVersion -lt $minWindowsVersion) {
+	throw "To install your app, you need to be running Windows version " + $minWindowsVersion + " or greater"
+}
 
-  "start_url": "./",
-  "scope": "./",
-  "id": "./",
+# Install the app using pwainstaller.exe
+Write-Host "Installing SVG/JPG/PNG Pro 4K Converter..."
+$currentDir = Get-Location
+$msixPath = ($currentDir.Path + "\" + "SVG_JPG_PNG Pro 4K Converter.sideload.msix")
+$installProc = Start-Process -FilePath "utils\pwainstaller.exe" -ArgumentList `"$msixPath`" -NoNewWindow -PassThru
+$handle = $installProc.Handle # cache pro.Handle, see https://stackoverflow.com/a/23797762/536
+$exitedNormally = $installProc.WaitForExit(10000)
 
-  "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
-  "orientation": "any",
+# Launch the app
+if ($installProc.ExitCode -eq 0) {
+	$app = Get-StartApps "SVG/JPG/PNG Pro 4K Converter"
 
-  "background_color": "#f4f5f7",
-  "theme_color": "#4a7dff",
+	# If it's an array, then we found multiple matching apps. Grab the last one.
+	if ($app -is [array]) {
+		Write-Host "Warning: found multiple apps installed named SVG/JPG/PNG Pro 4K Converter. Launching best guess. If the wrong app launches, find the right one in your start menu."
+		$app = $app[-1];
+	}
 
-  "categories": ["utilities", "productivity", "photo", "graphics"],
-
-  "prefer_related_applications": false,
-
-  "icons": [
-    {
-      "src": "./icon_192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icon_512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icon_192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "./icon_512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    }
-  ],
-
-  "shortcuts": [
-    {
-      "name": "Open converter",
-      "short_name": "Convert",
-      "description": "Open the PNG converter directly",
-      "url": "./"
-    }
-  ]
+	if ($app) {
+		Write-Host "Launching SVG/JPG/PNG Pro 4K Converter..."
+		start ("shell:AppsFolder\" + $app.AppId)
+	} else {
+		Write-Host "Couldn't find installed app. If there are no errors above, you can find the app in your start menu"
+	}
+} else {
+	Write-Error ("Installation failed, exit code " + $installProc.ExitCode)
+	Read-Host -Prompt "Press enter to exit"
 }
